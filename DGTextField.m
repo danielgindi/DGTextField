@@ -121,8 +121,14 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
         paragraphStyle.alignment = self.textAlignment;
-        [self.placeholder drawInRect:rect withAttributes:@{NSFontAttributeName: self.font,
-                                                           NSParagraphStyleAttributeName: paragraphStyle}];
+        
+        NSDictionary *drawAttrs = @{NSFontAttributeName: self.font,
+                                    NSParagraphStyleAttributeName: paragraphStyle,
+                                    NSForegroundColorAttributeName: _placeholderColor};
+        
+        CGSize size = [self.placeholder sizeWithAttributes:drawAttrs];
+        rect.origin.y += (rect.size.height - size.height) / 2.f - 1.f;
+        [self.placeholder drawInRect:rect withAttributes:drawAttrs];
 #elif __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
         CGSize stringSize = [self.placeholder sizeWithFont:self.font constrainedToSize:rect.size];
         rect.origin.y = (rect.size.height - stringSize.height) / 2.f;
