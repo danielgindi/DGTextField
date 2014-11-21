@@ -32,9 +32,10 @@
 
 #import <UIKit/UIKit.h>
 
+IB_DESIGNABLE
 @interface DGTextField : UITextField <UIAppearance>
 
-@property (nonatomic, strong) UIColor *placeholderColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) IBInspectable UIColor *placeholderColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) UIEdgeInsets contentInsets UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) UIEdgeInsets clearButtonInsets UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) UITextDirection textFieldUIDirection;
