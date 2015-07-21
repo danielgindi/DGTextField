@@ -59,7 +59,7 @@
 
 - (void)initialize_DGTextField
 {
-    self.textFieldUIDirection = UITextWritingDirectionNatural;
+    self.textDirection = UITextWritingDirectionNatural;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -103,9 +103,9 @@
     [self setNeedsDisplay];
 }
 
-- (void)setTextFieldUIDirection:(UITextDirection)textFieldUIDirection
+- (void)setTextDirection:(UITextDirection)textDirection
 {
-    _textFieldUIDirection = textFieldUIDirection;
+    _textDirection = textDirection;
     [self setNeedsDisplay];
 }
 
@@ -149,8 +149,8 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    if ((self.class.isRtl && _textFieldUIDirection == UITextWritingDirectionNatural)
-        || _textFieldUIDirection == UITextWritingDirectionRightToLeft)
+    if ((self.class.isRtl && _textDirection == UITextWritingDirectionNatural)
+        || _textDirection == UITextWritingDirectionRightToLeft)
     {
         _bypassClearButtonRect = YES;
         CGRect rect = UIEdgeInsetsInsetRect([super textRectForBounds:bounds], _contentInsets);
@@ -176,8 +176,8 @@
     {
         rect.origin.x += _clearButtonInsets.right - _clearButtonInsets.left;
         rect.origin.y += _clearButtonInsets.top - _clearButtonInsets.bottom;
-        if ((self.class.isRtl && _textFieldUIDirection == UITextWritingDirectionNatural)
-            || _textFieldUIDirection == UITextWritingDirectionRightToLeft)
+        if ((self.class.isRtl && _textDirection == UITextWritingDirectionNatural)
+            || _textDirection == UITextWritingDirectionRightToLeft)
         {
             rect.origin.x = bounds.origin.x + bounds.size.width - rect.size.width - (rect.origin.x - bounds.origin.x);
         }
