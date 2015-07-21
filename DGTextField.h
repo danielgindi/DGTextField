@@ -38,7 +38,7 @@ IB_DESIGNABLE
 @property (nonatomic, strong) IBInspectable UIColor *placeholderColor;
 @property (nonatomic, assign) UIEdgeInsets contentInsets UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) UIEdgeInsets clearButtonInsets UI_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) UITextDirection textFieldUIDirection;
+@property (nonatomic, assign) UITextDirection textDirection;
 
 - (BOOL)isRtl;
 
