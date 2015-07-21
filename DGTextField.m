@@ -127,7 +127,7 @@
                                     NSForegroundColorAttributeName: _placeholderColor};
         
         CGSize size = [self.placeholder sizeWithAttributes:drawAttrs];
-        rect.origin.y += (rect.size.height - size.height) / 2.f - 1.f;
+        rect.origin.y += (rect.size.height - size.height) / 2.f;
         [self.placeholder drawInRect:rect withAttributes:drawAttrs];
 #elif __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
         CGSize stringSize = [self.placeholder sizeWithFont:self.font constrainedToSize:rect.size];
