@@ -35,31 +35,16 @@
 @interface DGTextField ()
 {
     BOOL _bypassClearButtonRect;
+    BOOL _hasSemanticDirection;
 }
 @end
 
 @implementation DGTextField
 
-+ (BOOL)isRtl
-{
-    static BOOL isRtl = NO;
-    static BOOL isRtlFound = NO;
-    if (!isRtlFound)
-    {
-        isRtl = [NSLocale characterDirectionForLanguage:[NSBundle mainBundle].preferredLocalizations[0]] == NSLocaleLanguageDirectionRightToLeft;
-        isRtlFound = YES;
-    }
-    return isRtl;
-}
-
-- (BOOL)isRtl
-{
-    return self.class.isRtl;
-}
-
 - (void)initialize_DGTextField
 {
     self.textDirection = UITextWritingDirectionNatural;
+    _hasSemanticDirection = ([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending);
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -149,8 +134,11 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    if ((self.class.isRtl && _textDirection == UITextWritingDirectionNatural)
-        || _textDirection == UITextWritingDirectionRightToLeft)
+    BOOL isRtl = [[UIApplication sharedApplication] userInterfaceLayoutDirection] == UIUserInterfaceLayoutDirectionRightToLeft;
+    BOOL isAlreadyFlipped = _hasSemanticDirection && [UITextField userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
+    
+    if (((isRtl && _textDirection == UITextWritingDirectionNatural)
+        || _textDirection == UITextWritingDirectionRightToLeft) != isAlreadyFlipped)
     {
         _bypassClearButtonRect = YES;
         CGRect rect = UIEdgeInsetsInsetRect([super textRectForBounds:bounds], _contentInsets);
@@ -174,10 +162,22 @@
 	CGRect rect = [super clearButtonRectForBounds:bounds];
     if (!_bypassClearButtonRect)
     {
-        rect.origin.x += _clearButtonInsets.right - _clearButtonInsets.left;
-        rect.origin.y += _clearButtonInsets.top - _clearButtonInsets.bottom;
-        if ((self.class.isRtl && _textDirection == UITextWritingDirectionNatural)
-            || _textDirection == UITextWritingDirectionRightToLeft)
+        BOOL isRtl = [[UIApplication sharedApplication] userInterfaceLayoutDirection] == UIUserInterfaceLayoutDirectionRightToLeft;
+        BOOL isAlreadyFlipped = _hasSemanticDirection && [UITextField userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
+        
+        if (isAlreadyFlipped)
+        {
+            rect.origin.x -= _clearButtonInsets.right - _clearButtonInsets.left;
+            rect.origin.y -= _clearButtonInsets.top - _clearButtonInsets.bottom;
+        }
+        else
+        {
+            rect.origin.x += _clearButtonInsets.right - _clearButtonInsets.left;
+            rect.origin.y += _clearButtonInsets.top - _clearButtonInsets.bottom;
+        }
+        
+        if (((isRtl && _textDirection == UITextWritingDirectionNatural)
+            || _textDirection == UITextWritingDirectionRightToLeft) != isAlreadyFlipped)
         {
             rect.origin.x = bounds.origin.x + bounds.size.width - rect.size.width - (rect.origin.x - bounds.origin.x);
         }
