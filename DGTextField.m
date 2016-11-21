@@ -102,7 +102,6 @@
     {
         [_placeholderColor setFill];
         
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
         paragraphStyle.alignment = self.textAlignment;
@@ -114,17 +113,6 @@
         CGSize size = [self.placeholder sizeWithAttributes:drawAttrs];
         rect.origin.y += (rect.size.height - size.height) / 2.f;
         [self.placeholder drawInRect:rect withAttributes:drawAttrs];
-#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0
-        CGSize stringSize = [self.placeholder sizeWithFont:self.font constrainedToSize:rect.size];
-        rect.origin.y = (rect.size.height - stringSize.height) / 2.f;
-        rect.size.height = stringSize.height;
-        [self.placeholder drawInRect:rect withFont:self.font lineBreakMode:NSLineBreakByTruncatingTail alignment:self.textAlignment];
-#else
-        CGSize stringSize = [self.placeholder sizeWithFont:self.font constrainedToSize:rect.size];
-        rect.origin.y = (rect.size.height - stringSize.height) / 2.f;
-        rect.size.height = stringSize.height;
-        [self.placeholder drawInRect:rect withFont:self.font lineBreakMode:UILineBreakModeTailTruncation alignment:self.textAlignment];
-#endif
     }
     else
     {
